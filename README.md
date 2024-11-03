@@ -32,8 +32,8 @@ This project is a User Management System built with React, using Material-UI for
 2. Install the dependencies:
    npm install
 
-3.Start the json server
-  json-server --watch db.json --port 3000
+3. Start the json server:
+   json-server --watch db.json --port 3000
 
-4.Run the project
-  npm run dev
+4. Run the project:
+   npm run dev
