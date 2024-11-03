@@ -7,7 +7,7 @@ interface IErrorResponse {
   status: number;
 }
 
-const APiCallService = async (
+const APICallService = async (
   method: "get" | "post" | "put" | "delete",
   url: string,
   data?: any
@@ -18,7 +18,6 @@ const APiCallService = async (
       url: `${BASE_URL}${url}`,
       ...(data && { data }),
     });
-    console.log("response", response);
     return response.data ? response.data : 1;
   } catch (error) {
     console.log("error", error);
@@ -29,4 +28,4 @@ const APiCallService = async (
   }
 };
 
-export default APiCallService;
+export default APICallService;

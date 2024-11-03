@@ -29,12 +29,14 @@ const AllUsers = () => {
   const [rowData, setRowData] = useState<IUser[]>([]);
   const [colDefs, setColDefs] = useState<ColDef[]>([
     { field: "id", hide: true },
-    { field: "name", sortable: true, filter: true },
-    { field: "email", sortable: true, filter: true },
-    { field: "age", sortable: false },
-    { field: "role", sortable: true, filter: true },
+    { field: "name", sortable: true, filter: true, width: 350 },
+    { field: "email", sortable: true, filter: true, width: 400 },
+    { field: "age", sortable: false, width: 200 },
+    { field: "role", sortable: true, filter: true, width: 300 },
     {
       field: "Action",
+      sortable: false,
+      width: 250,
       cellRenderer: (params: any) => {
         const handleEdit = () => {
           handleOpenEditDialog(params.data);

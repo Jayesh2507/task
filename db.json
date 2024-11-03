@@ -125,6 +125,20 @@
       "email": "Pooja@gmail.com",
       "age": 27,
       "role": "Admin"
+    },
+    {
+      "name": "Komal Prajapati",
+      "email": "komal@gmail.com",
+      "age": 30,
+      "role": "Admin",
+      "id": "0a16"
+    },
+    {
+      "name": "Jayesh Prajapati",
+      "email": "Jayesh@gmail.com",
+      "age": 23,
+      "role": "Admin",
+      "id": "2097"
     }
   ]
 }

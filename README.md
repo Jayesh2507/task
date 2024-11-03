@@ -26,7 +26,18 @@ This project is a User Management System built with React, using Material-UI for
    npm install
 
 3. Start the json server:
-   json-server --watch db.json --port 3000
+   npm run json-server
 
 4. Run the project:
    npm run dev
+
+## Screenshot
+
+![All Users Screenshot](./src/assets/all-users.png)
+
+![Add User Screenshot](./src/assets/add-user.png)
+
+![Edit User Screenshot](./src/assets/edit-user.png)
+
+![Delete User Screenshot](./src/assets/delete-user.png)
+

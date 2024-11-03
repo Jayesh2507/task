@@ -70,7 +70,13 @@ const UserForm: React.FC<UserFormDialogProps> = ({
           <Controller
             name="name"
             control={control}
-            rules={{ required: VALIDATION_MSGS.nameRequired, minLength: 3 }}
+            rules={{
+              required: VALIDATION_MSGS.nameRequired,
+              minLength: {
+                value: 3,
+                message: VALIDATION_MSGS.invalidName,
+              },
+            }}
             render={({ field }) => (
               <TextField
                 {...field}
@@ -79,7 +85,7 @@ const UserForm: React.FC<UserFormDialogProps> = ({
                 fullWidth
                 margin="normal"
                 error={!!errors.name}
-                helperText={errors.name ? VALIDATION_MSGS.invalidName : ""}
+                helperText={errors.name ? errors.name.message : ""}
               />
             )}
           />
