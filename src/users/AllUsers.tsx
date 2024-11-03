@@ -6,13 +6,12 @@ import { ColDef } from "ag-grid-community";
 import { Button, IconButton } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import AddUser from "./AddUser";
+import UserForm from "./UserForm";
 import { useFetchUsers } from "../custom-hooks/useFetchUsers";
 import useManageUser from "../custom-hooks/useManageUser";
-import { IUser, IUserFormInputs } from "../types";
+import { IUser } from "../types/user";
 import { toast } from "react-toastify";
 import DeleteUser from "./DeleteUser";
-import EditUser from "./EditUser";
 
 const AllUsers = () => {
   const { addUser, deleteUser, editUser } = useManageUser();
@@ -32,7 +31,7 @@ const AllUsers = () => {
     { field: "id", hide: true },
     { field: "name", sortable: true, filter: true },
     { field: "email", sortable: true, filter: true },
-    { field: "age", sortable: true, filter: true },
+    { field: "age", sortable: false },
     { field: "role", sortable: true, filter: true },
     {
       field: "Action",
@@ -100,7 +99,7 @@ const AllUsers = () => {
     setOpenDeleteDialog(false);
   };
 
-  const handleAddUser = async (data: IUserFormInputs) => {
+  const handleAddUser = async (data: IUser) => {
     const response = await addUser(data);
     if (response) {
       toast.success("User added successfully");
@@ -110,11 +109,14 @@ const AllUsers = () => {
   };
 
   const handleEditUser = async (data: IUser) => {
-    const response = await editUser(data.id, data);
-    if (response) {
-      toast.success("User edited successfully");
-      handleCloseEditDialog();
-      fetchUsers();
+    console.log("data", data);
+    if (data.id) {
+      const response = await editUser(data?.id, data);
+      if (response) {
+        toast.success("User edited successfully");
+        handleCloseEditDialog();
+        fetchUsers();
+      }
     }
   };
 
@@ -130,7 +132,7 @@ const AllUsers = () => {
   return (
     <>
       {openAddDialog && (
-        <AddUser
+        <UserForm
           open={openAddDialog}
           onClose={handleCloseAddDialog}
           onSubmit={handleAddUser}
@@ -138,17 +140,17 @@ const AllUsers = () => {
       )}
 
       {selectedUser && openEditDialog && (
-        <EditUser
-          userData={selectedUser}
+        <UserForm
+          user={selectedUser}
           open={openEditDialog}
           onClose={handleCloseEditDialog}
           onSubmit={handleEditUser}
         />
       )}
 
-      {selectedUser && openDeleteDialog && (
+      {selectedUser && selectedUser.id && openDeleteDialog && (
         <DeleteUser
-          id={selectedUser?.id}
+          id={selectedUser.id}
           open={openDeleteDialog}
           onClose={handleCloseDeleteDialog}
           onDelete={handleDeleteUser}

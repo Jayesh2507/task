@@ -10,37 +10,48 @@ import {
   Box,
 } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
-import { IUser, IUserRole } from "../types";
+import { IUser, IUserRole } from "../types/user";
+import { USER_ROLES, VALIDATION_MSGS } from "../constants/constants";
 
-const roles: IUserRole[] = ["Admin", "User", "Viewer"];
-
-interface EditUserDialogProps {
+interface UserFormDialogProps {
   open: boolean;
   onClose: () => void;
   onSubmit: (data: IUser) => Promise<void>;
-  userData: IUser;
+  user?: IUser;
 }
 
-const EditUser: React.FC<EditUserDialogProps> = ({
+const UserForm: React.FC<UserFormDialogProps> = ({
   open,
   onClose,
   onSubmit,
-  userData,
+  user,
 }) => {
   const [loading, setLoading] = useState<boolean>(false);
+
   const {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<IUser>({
-    defaultValues: userData,
+  } = useForm({
+    defaultValues: {
+      name: user?.name || "",
+      email: user?.email || "",
+      age: user?.age || "",
+      role: user?.role || "",
+    },
   });
 
-  const handleFormSubmit = async (data: IUser) => {
+  const handleFormSubmit = async (data: {
+    name: string;
+    email: string;
+    age: string | number;
+    role: string;
+  }) => {
     const formattedData: IUser = {
       ...data,
       age: Number(data.age),
       role: data.role as IUserRole,
+      id: user?.id,
     };
     setLoading(true);
     await onSubmit(formattedData);
@@ -49,7 +60,7 @@ const EditUser: React.FC<EditUserDialogProps> = ({
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
-      <DialogTitle>Edit User</DialogTitle>
+      <DialogTitle>{user ? "Edit User" : "Add User"}</DialogTitle>
       <DialogContent>
         <Box
           component="form"
@@ -59,7 +70,7 @@ const EditUser: React.FC<EditUserDialogProps> = ({
           <Controller
             name="name"
             control={control}
-            rules={{ required: "Name is required", minLength: 3 }}
+            rules={{ required: VALIDATION_MSGS.nameRequired, minLength: 3 }}
             render={({ field }) => (
               <TextField
                 {...field}
@@ -68,9 +79,7 @@ const EditUser: React.FC<EditUserDialogProps> = ({
                 fullWidth
                 margin="normal"
                 error={!!errors.name}
-                helperText={
-                  errors.name ? "Name must be at least 3 characters" : ""
-                }
+                helperText={errors.name ? VALIDATION_MSGS.invalidName : ""}
               />
             )}
           />
@@ -78,7 +87,7 @@ const EditUser: React.FC<EditUserDialogProps> = ({
             name="email"
             control={control}
             rules={{
-              required: "Email is required",
+              required: VALIDATION_MSGS.emailRequired,
               pattern: {
                 value: /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/,
                 message: "Enter a valid email",
@@ -100,9 +109,9 @@ const EditUser: React.FC<EditUserDialogProps> = ({
             name="age"
             control={control}
             rules={{
-              required: "Age is required",
-              min: { value: 18, message: "Must be at least 18" },
-              max: { value: 65, message: "Must be 65 or younger" },
+              required: VALIDATION_MSGS.ageRequired,
+              min: { value: 18, message: VALIDATION_MSGS.minAge },
+              max: { value: 65, message: VALIDATION_MSGS.maxAge },
             }}
             render={({ field }) => (
               <TextField
@@ -120,7 +129,7 @@ const EditUser: React.FC<EditUserDialogProps> = ({
           <Controller
             name="role"
             control={control}
-            rules={{ required: "Role is required" }}
+            rules={{ required: VALIDATION_MSGS.roleRequired }}
             render={({ field }) => (
               <TextField
                 {...field}
@@ -130,9 +139,9 @@ const EditUser: React.FC<EditUserDialogProps> = ({
                 fullWidth
                 margin="normal"
                 error={!!errors.role}
-                helperText={errors.role ? "Role is required" : ""}
+                helperText={errors.role ? VALIDATION_MSGS.roleRequired : ""}
               >
-                {roles.map((role) => (
+                {USER_ROLES.map((role: string) => (
                   <MenuItem key={role} value={role}>
                     {role}
                   </MenuItem>
@@ -152,11 +161,11 @@ const EditUser: React.FC<EditUserDialogProps> = ({
           variant="contained"
           disabled={loading}
         >
-          Save Changes
+          {user ? "Save Changes" : "Add User"}
         </Button>
       </DialogActions>
     </Dialog>
   );
 };
 
-export default EditUser;
+export default UserForm;
