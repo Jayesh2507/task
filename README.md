@@ -17,13 +17,6 @@ This project is a User Management System built with React, using Material-UI for
 - TypeScript
 - react-hook-form
 
-## Getting Started
-
-### Prerequisites
-
-- Node.js (version 12 or later)
-- npm (Node Package Manager)
-
 ### Installation
 
 1. Clone the repository:
